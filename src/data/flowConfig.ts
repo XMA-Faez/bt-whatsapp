@@ -27,7 +27,7 @@ export interface FlowData {
 
 export const generateBookingLink = (
   country: Country,
-  serviceType: ServiceType
+  serviceType: ServiceType,
 ): string => {
   return `https://example.com/book?utm_source=whatsapp&utm_medium=chat&utm_campaign=bt_support_bot&utm_content=${country.toLowerCase()}_${serviceType}`;
 };
@@ -62,7 +62,7 @@ Starting from $49.99 per bag/month
 export const flowConfig: Record<string, FlowNode> = {
   start: {
     message:
-      "Hi! This is BaggageTaxi support.\n\nI can help with prices, services, or existing bookings.\n\nWhere are you located?",
+      "Hi! This is BaggageTAXI support.\n\nI can help with prices, services, or existing bookings.\n\nWhere are you located?",
     options: [
       {
         id: "1",
@@ -105,7 +105,7 @@ export const flowConfig: Record<string, FlowNode> = {
       },
       {
         id: "3",
-        label: "How BaggageTaxi works",
+        label: "How BaggageTAXI works",
         value: "how_it_works",
         nextState: "how_it_works",
       },
@@ -136,6 +136,12 @@ export const flowConfig: Record<string, FlowNode> = {
         nextState: "prices_info",
         setData: { key: "serviceType", valueFromOption: true },
       },
+      {
+        id: "4",
+        label: "Back to main menu",
+        value: "menu",
+        nextState: "main_menu",
+      }
     ],
   },
 
@@ -171,7 +177,12 @@ export const flowConfig: Record<string, FlowNode> = {
   prices_end: {
     message: "Anything else I can help you with?",
     options: [
-      { id: "1", label: "Back to main menu", value: "menu", nextState: "main_menu" },
+      {
+        id: "1",
+        label: "Back to main menu",
+        value: "menu",
+        nextState: "main_menu",
+      },
       { id: "2", label: "End chat", value: "end", nextState: "end" },
     ],
   },
@@ -203,7 +214,7 @@ export const flowConfig: Record<string, FlowNode> = {
 
   how_it_works: {
     message: (data) =>
-      `Here's how BaggageTaxi works in ${data.country}:\n\n1. **We pick up your bags** from your location\n2. **We store or deliver** to your destination\n3. **You track everything** in real-time\n\nWhat would you like to know more about?`,
+      `Here's how BaggageTAXI works in ${data.country}:\n\n1. **We pick up your bags** from your location\n2. **We store or deliver** to your destination\n3. **You track everything** in real-time\n\nWhat would you like to know more about?`,
     options: [
       {
         id: "1",
@@ -223,6 +234,12 @@ export const flowConfig: Record<string, FlowNode> = {
         value: "prices",
         nextState: "prices_service",
       },
+      {
+        id: "4",
+        label: "Back to main menu",
+        value: "menu",
+        nextState: "main_menu",
+      }
     ],
   },
 
@@ -234,7 +251,12 @@ export const flowConfig: Record<string, FlowNode> = {
 - Contactless handoff available
 - SMS updates at every step`,
     options: [
-      { id: "1", label: "Back to main menu", value: "menu", nextState: "main_menu" },
+      {
+        id: "1",
+        label: "Back to main menu",
+        value: "menu",
+        nextState: "main_menu",
+      },
       { id: "2", label: "End chat", value: "end", nextState: "end" },
     ],
   },
@@ -247,13 +269,18 @@ export const flowConfig: Record<string, FlowNode> = {
 - Full insurance coverage
 - Tamper-proof seals on all items`,
     options: [
-      { id: "1", label: "Back to main menu", value: "menu", nextState: "main_menu" },
+      {
+        id: "1",
+        label: "Back to main menu",
+        value: "menu",
+        nextState: "main_menu",
+      },
       { id: "2", label: "End chat", value: "end", nextState: "end" },
     ],
   },
 
   end: {
-    message: "Thank you for using BaggageTaxi support! Have a great day!",
+    message: "Thank you for using BaggageTAXI support! Have a great day!",
     endChat: true,
   },
 };

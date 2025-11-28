@@ -1,4 +1,4 @@
-# UX Analysis: BaggageTaxi WhatsApp Chatbot
+# UX Analysis: BaggageTAXI WhatsApp Chatbot
 
 ## Current Flow Summary
 
@@ -78,7 +78,7 @@ Start → Country → Main Menu → [Pricing | Existing Booking | How It Works]
 
 **Problem**: No acknowledgment when user selects country. They select "UAE" and immediately see main menu—no confirmation of their choice.
 
-**Recommendation**: Brief acknowledgment: "Great! I can help you with BaggageTaxi services in the UAE." before main menu.
+**Recommendation**: Brief acknowledgment: "Great! I can help you with BaggageTAXI services in the UAE." before main menu.
 
 ---
 
