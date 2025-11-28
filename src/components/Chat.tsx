@@ -7,7 +7,7 @@ import { TextInput } from "./TextInput";
 
 const createId = () => Math.random().toString(36).substring(2, 9);
 
-const initialData: FlowData = {
+const initialFlowData: FlowData = {
   country: null,
   serviceType: null,
   bookingNumber: null,
@@ -15,15 +15,37 @@ const initialData: FlowData = {
   issueDescription: null,
 };
 
+function getInitialState() {
+  const node = flowConfig["start"];
+  const message =
+    typeof node.message === "function"
+      ? node.message(initialFlowData)
+      : node.message;
+  const options =
+    typeof node.options === "function"
+      ? node.options(initialFlowData)
+      : node.options || [];
+
+  const initialMessage: Message = {
+    id: createId(),
+    content: message,
+    sender: "bot",
+    timestamp: new Date(),
+  };
+
+  return { initialMessage, initialOptions: options };
+}
+
 export function Chat() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [flowData, setFlowData] = useState<FlowData>(initialData);
-  const [currentOptions, setCurrentOptions] = useState<FlowOption[]>([]);
+  const { initialMessage, initialOptions } = getInitialState();
+
+  const [messages, setMessages] = useState<Message[]>([initialMessage]);
+  const [flowData, setFlowData] = useState<FlowData>(initialFlowData);
+  const [currentOptions, setCurrentOptions] = useState<FlowOption[]>(initialOptions);
   const [inputMode, setInputMode] = useState<string | null>(null);
   const [inputNextState, setInputNextState] = useState<string | null>(null);
   const [chatEnded, setChatEnded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const hasInitialized = useRef(false);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -84,23 +106,17 @@ export function Chat() {
       } else if (node.options) {
         // Options can be static array or function
         const options =
-          typeof node.options === "function" ? node.options(data) : node.options;
+          typeof node.options === "function"
+            ? node.options(data)
+            : node.options;
         setCurrentOptions(options);
       } else if (node.inputMode) {
         setInputMode(node.inputMode);
         setInputNextState(node.inputNextState || null);
       }
     },
-    [addBotMessage]
+    [addBotMessage],
   );
-
-  // Initialize on mount
-  useEffect(() => {
-    if (!hasInitialized.current) {
-      hasInitialized.current = true;
-      processState("start", initialData);
-    }
-  }, [processState]);
 
   const handleOptionSelect = (option: FlowOption) => {
     // If option has external link, open it
@@ -152,15 +168,13 @@ export function Chat() {
   };
 
   const handleRestart = () => {
-    setMessages([]);
-    setFlowData(initialData);
-    setCurrentOptions([]);
+    const { initialMessage, initialOptions } = getInitialState();
+    setMessages([initialMessage]);
+    setFlowData(initialFlowData);
+    setCurrentOptions(initialOptions);
     setInputMode(null);
     setInputNextState(null);
     setChatEnded(false);
-    setTimeout(() => {
-      processState("start", initialData);
-    }, 100);
   };
 
   return (

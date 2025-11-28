@@ -142,7 +142,7 @@ export const flowConfig: Record<string, FlowNode> = {
   prices_info: {
     message: (data) =>
       data.serviceType ? getPricingInfo(data.serviceType) : "",
-    options: (data) => [
+    options: () => [
       {
         id: "1",
         label: "Book Now",
